@@ -8,10 +8,12 @@ namespace graphics {
     struct basic_vertex_traits {
         int     id;
         vec3f   pos;
+        vec3f   nor;
     };
 
     struct basic_triangle_traits {
         int     id;
+        vec2f   uv[3];
     };
 
 };
