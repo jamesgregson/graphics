@@ -26,9 +26,9 @@ namespace graphics {
     private:
 
         vertex(){}
-        virtual ~vertex(){
+        ~vertex(){
             if( !m_triangles.empty() ){
-                throw std::runtime_error("Vertex is still referenced by triangles!");
+                assert( false );
             }
         }
 
@@ -44,7 +44,7 @@ namespace graphics {
     private:
         void add_triangle( triangle_t *t ){
             if( std::find(m_triangles.begin(),m_triangles.end(),t) != m_triangles.end() ){
-                throw std::runtime_error("Triangle is already referenced by vertex!");
+                assert( false );
             }
             m_triangles.push_back( t );
         }
@@ -54,7 +54,7 @@ namespace graphics {
             if( it != m_triangles.end() ){
                 m_triangles.erase(it);
             } else {
-                throw std::runtime_error("Triangle is not referenced by vertex!");
+                assert( false );
             }
         }
 
@@ -88,7 +88,7 @@ namespace graphics {
             c->add_triangle( this );
         }
 
-        virtual ~triangle(){
+        ~triangle(){
             m_vertices[0]->remove_triangle( this );
             m_vertices[1]->remove_triangle( this );
             m_vertices[2]->remove_triangle( this );

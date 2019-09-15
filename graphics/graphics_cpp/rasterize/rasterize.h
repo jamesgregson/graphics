@@ -1,6 +1,7 @@
 #ifndef __GRAPHICS_RASTERIZE_H
 #define __GRAPHICS_RASTERIZE_H
 
+#include <cmath>
 #include <tuple>
 #include <iostream>
 #include <algorithm>
@@ -56,7 +57,7 @@ namespace graphics {
                 bary.z = -C*x + A*y;
                 bary.x = 1.0f-bary.y-bary.z;
                 if( bary.x >= 0.0 && bary.y >= 0.0f & bary.z >= 0.0f )
-                    shd->shade( i, j, bary, tri );
+                    shd->shade( i, j, bary, tri, (*tri)[0], (*tri)[1], (*tri)[2] );
             }
         }
     }

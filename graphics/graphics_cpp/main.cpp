@@ -35,6 +35,9 @@ private:
 
 int main( int argc, char **argv ){
 
+    auto blah = vec2f::make(1.0f,2.0f);
+    auto tmp = blah.homogeneous(1.0f);
+
     auto m = mesh<mesh_traits<basic_vertex_traits,basic_triangle_traits>>();
     auto a = m.add_vertex();
     auto b = m.add_vertex();
@@ -51,7 +54,7 @@ int main( int argc, char **argv ){
     auto shd = shader(100,100);
     rasterize_triangle( &shd, t1 );
     rasterize_triangle( &shd, t2 );
-    shd.save("dump.png");
+    //shd.save("dump.png");
 
     return 0;
 }

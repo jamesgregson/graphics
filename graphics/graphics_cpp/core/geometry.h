@@ -3,6 +3,8 @@
 
 #include <cstddef>
 
+#include "sfinae.h"
+
 namespace graphics {
 
     template< typename T >
@@ -16,6 +18,9 @@ namespace graphics {
 
     template< typename T >
     class vec2 {
+    public:
+        typedef vec2<T> this_t;
+
         union {
             struct {
                 T x,y;
@@ -27,16 +32,44 @@ namespace graphics {
             return 2;
         }
 
+        template< typename V >
+        ensure_arithmetic_t<V,vec2<V>> as() const {
+            return {V(x),V(y)};
+        }
+
+        this_t operator-() const {
+            return {-x,-y};
+        }
+
+        this_t operator+( const this_t& in ) const {
+            return {x+in.x,y+in.y};
+        }
+
+        this_t operator-( const this_t& in ) const {
+            return {x-in.x,y-in.y};
+        }
+
+        template< typename S >
+        ensure_arithmetic_t<S,this_t> operator*( const S& in ) const {
+            return {x*in,y*in};
+        }
+
+        template< typename S >
+        ensure_arithmetic_t<S,this_t> operator/( const S& in ) const {
+            return {x/in,y/in};
+        }
+
+        inline vec3<T> homogeneous( const T& w=T(1) );
+
         static vec2<T> make( const T& x, const T& y ){
             return {x,y};
         }
     };
 
-
-
     template< typename T >
     class vec3 {
     public:
+        typedef vec3<T> this_t;
         union {
             struct {
                 T x,y,z;
@@ -48,6 +81,40 @@ namespace graphics {
             return 3;
         } 
 
+        template< typename V >
+        ensure_arithmetic_t<V,vec3<V>> as() const {
+            return {V(x),V(y),V(z)};
+        }
+
+        this_t operator-() const {
+            return {-x,-y,-z};
+        }
+
+        this_t operator+( const this_t& in ) const {
+            return {x+in.x,y+in.y,z+in.z};
+        }
+
+        this_t operator-( const this_t& in ) const {
+            return {x-in.x,y-in.y,z-in.z};
+        }
+
+        template< typename S >
+        ensure_arithmetic_t<S,this_t> operator*( const S& in ) const {
+            return {x*in,y*in};
+        }
+
+        template< typename S >
+        ensure_arithmetic_t<S,this_t> operator/( const S& in ) const {
+            return {x/in,y/in};
+        }
+
+
+        inline vec4<T> homogeneous( const T& w=T(1) );
+
+        inline vec2<T> xy() const {
+            return {x,y};
+        }
+
         static vec3<T> make( const T& x, const T& y, const T& z ){
             return {x,y,z};
         }   
@@ -56,6 +123,7 @@ namespace graphics {
     template< typename T >
     class vec4 {
     public:
+        typedef vec4<T> this_t;
         union {
             struct {
                 T x,y,z,w;
@@ -67,10 +135,52 @@ namespace graphics {
             return 4;
         }
 
+        template< typename V >
+        vec4<V> as() const {
+            return {V(x),V(y),V(z),V(w)};
+        }
+
+        this_t operator-() const {
+            return {-x,-y,-z,-w};
+        }
+
+        this_t operator+( const this_t& in ) const {
+            return {x+in.x,y+in.y,z+in.z,w+in.w};
+        }
+
+        this_t operator-( const this_t& in ) const {
+            return {x-in.x,y-in.y,z-in.z,w-in.w};
+        }
+
+        template< typename S >
+        ensure_arithmetic_t<S,this_t> operator*( const S& in ) const {
+            return {x*in,y*in,z*in,w*in};
+        }
+
+        template< typename S >
+        ensure_arithmetic_t<S,this_t> operator/( const S& in ) const {
+            return {x/in,y/in,z/in,w/in};
+        }
+
+        inline vec3<T> xyz() const {
+            return {x,y,z};
+        }
+
         static vec4<T> make( const T& x, const T& y, const T& z, const T& w ){
             return {x,y,z,w};
         }
     };
+
+    template< typename T >
+    vec3<T> vec2<T>::homogeneous( const T& w ){
+        return {x,y,w};
+    }
+
+    template< typename T >
+    vec4<T> vec3<T>::homogeneous( const T& w ){
+        return {x,y,z,w};
+    }
+
 
     typedef vec2<int>    vec2i;
     typedef vec2<float>  vec2f;
